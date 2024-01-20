@@ -1,59 +1,87 @@
-gcloud-pubsub-emulator
-----------------------
-This repository contains the Docker configuration for Google's PubSub emulator. It's mainly the dockerization and documentation of https://github.com/prep/pubsubc 
+# Containerised Google Cloud Pub/Sub Emulator
 
-Installation
-------------
-A pre-built Docker container is available for Docker Hub:
+This repository contains the Docker configuration for a Google PubSub emulator. It's mainly the containerisation of 
+https://github.com/thinkfluent/pubsubc 
 
-```
+Based on alpine linux, the image is around ~260MB in size (A *lot* smaller than a full-blown gcloud SDK image).
+
+## Install & Run
+
+A pre-built Docker container is available from Docker Hub:
+
+```bash
 docker run --rm -ti -p 8681:8681 fluentthinking/gcloud-pubsub-emulator:latest
 ```
 
 Or, you can build this repository yourself:
 
-```
-docker build -t gcloud-pubsub-emulator:latest .
+```bash
+docker build -t gcloud-pubsub-emulator:latest --platform=linux/amd64 .
 docker run --rm -ti -p 8681:8681 gcloud-pubsub-emulator:latest
 ```
 
-Usage
------
-After you've ran the above-mentioned `docker run` command, you should be able to use any app that has PubSub implemented and point it to your Docker container by specifying the `PUBSUB_EMULATOR_HOST` environment variable.
+## Usage
 
-```
-env PUBSUB_EMULATOR_HOST=localhost:8681 ./myapp
-```
+Once the emulator is up and running, you should be able to use any app that has PubSub 
+implemented and point it to your Docker container by specifying the `PUBSUB_EMULATOR_HOST` environment variable.
 
-or
+e.g. `PUBSUB_EMULATOR_HOST=localhost:8681`
 
-```
-export PUBSUB_EMULATOR_HOST=localhost:8681
-./myapp
-```
+### Automated Topic and Subscription Creation
 
-### Automatic topic and subscription creation
-This image also provides the ability to create topics and subscriptions in projects on startup by specifying the `PUBSUB_PROJECT` environment variable with a sequentual number appended to it, starting with _1_. The format of the environment variable is relatively simple:
+This image can also automatically create topics and subscriptions on startup. Configuration via either (or both of)
+* [Environment variables](https://github.com/thinkfluent/pubsubc?tab=readme-ov-file#environment-variables)
+* [Docker labels](https://github.com/thinkfluent/pubsubc?tab=readme-ov-file#docker-labels) (for use with docker-compose etc.)
 
-```
-PROJECTID,TOPIC1,TOPIC2:SUBSCRIPTION1:SUBSCRIPTION2,TOPIC3:SUBSCRIPTION3
-```
 
-A comma-separated list where the first item is the _project ID_ and the rest are topics. The topics themselves are colon-separated where the first item is the _topic ID_ and the rest are _subscription IDs_. A topic doesn't necessarily need to specify subscriptions.
-
-For example, if you have _project ID_ `company-dev`, with topic `invoices` that has a subscription `invoice-calculator`, another topic `chats` with subscriptions `slack-out` and `irc-out` and a third topic `notifications` without any subscriptions, you'd define it this way:
-
-```
-PUBSUB_PROJECT1=company-dev,invoices:invoice-calculator,chats:slack-out:irc-out,notifications
+#### Environment Example
+```dotenv
+PUBSUB_PROJECT1=project-name,topic1,topic2:subscription1:subscription2
+PUBSUB_PROJECT2=project-two,topicA,topicB:subscriptionX:subscriptionY
+PUBSUB_PROJECT3=project-name,topic:push-subscription+myapp/endpoint
 ```
 
-So the full command would look like:
-
+#### Docker Label Example
+```yaml
+services:
+  # Your application service
+  myapp:
+    image: busybox:latest
+    environment:
+      - PUBSUB_EMULATOR_HOST=pubsub-emulator:8681
+    labels:
+      - 'pubsubc.config1=project-one,topic1,topic2:subscription1:subscription2'
+      - 'pubsubc.config2=project-two,topic:push-subscription+endpoint'
 ```
-docker run --rm -ti -p 8681:8681 -e PUBSUB_PROJECT1=company-dev,invoices:invoice-calculator,chats:slack-out:irc-out,notifications messagebird/gcloud-pubsub-emulator:latest
-```
-
-If you want to define more projects, you'd simply add a `PUBSUB_PROJECT2`, `PUBSUB_PROJECT3`, etc.
 
 ### wait-for, wait-for-it
-If you're using this Docker image in a docker-compose setup or something similar, you might have leveraged scripts like [wait-for](https://github.com/eficode/wait-for) or [wait-for-it](https://github.com/vishnubob/wait-for-it) to detect when the PubSub service comes up before starting a container that depends on it being up. If you're _not_ using the above-mentioned _PUBSUB_PROJECT_ environment variable, you can simply check if port `8681` is available. If you _do_ depend on one or more _PUBSUB_PROJECT_ environment variables, you should check for the availability of port `8682` as that one will become available once all the topics and subscriptions have been created.
+If you're using this Docker image in a docker-compose setup or something similar, you might have leveraged scripts like 
+[wait-for](https://github.com/eficode/wait-for) or [wait-for-it](https://github.com/vishnubob/wait-for-it) to detect when the PubSub service comes up before starting a container that 
+depends on it being up. 
+
+If you're _not_ using the above-mentioned `PUBSUB_PROJECT` environment variable, you can simply 
+check if port `8681` is available. If you _do_ depend on one or more `PUBSUB_PROJECT` environment variables, you should 
+check for the availability of port `8682` as that one will become available once all the topics and subscriptions have 
+been created.
+
+### Port Configuration, Mapping
+Whilst the default ports are 8681 for the Pub/Sub emulator and 8682 for the topic-ready check, you can change these by
+setting the `PUBSUB_PORT` and `PUBSUB_TOPIC_READY_PORT` environment variables respectively.
+
+Or, just map them in your docker run / docker-compose setup:
+```yaml
+services:
+  # Pub/Sub Emulator. We mount the docker socket so we can use the Docker API to fetch configuration labels
+  pubsub-emulator:
+    image: fluentthinking/gcloud-pubsub-emulator:latest
+    ports:
+      - '8085:8681'
+      - '8086:8682'
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+```
+
+## Prior Art
+Based on the work of:
+- https://github.com/floatschedule/pubsubc
+- https://github.com/marcelcorso/gcloud-pubsub-emulator
