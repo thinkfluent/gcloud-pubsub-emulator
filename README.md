@@ -5,6 +5,8 @@ https://github.com/thinkfluent/pubsubc
 
 Based on alpine linux, the image is around ~260MB in size (A *lot* smaller than a full-blown gcloud SDK image).
 
+`fluentthinking/gcloud-pubsub-emulator:latest`
+
 ## Install & Run
 
 A pre-built Docker container is available from Docker Hub:
