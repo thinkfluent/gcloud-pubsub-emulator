@@ -68,7 +68,7 @@ been created.
 
 ### Port Configuration, Mapping
 Whilst the default ports are 8681 for the Pub/Sub emulator and 8682 for the topic-ready check, you can change these by
-setting the `PUBSUB_PORT` and `PUBSUB_TOPIC_READY_PORT` environment variables respectively.
+setting the `PUBSUB_PORT` and `READY_PORT` environment variables respectively.
 
 Or, just map them in your docker run / docker-compose setup:
 ```yaml
