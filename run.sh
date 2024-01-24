@@ -11,4 +11,4 @@
 (/usr/bin/wait-for localhost:${PUBSUB_PORT} -- env PUBSUB_EMULATOR_HOST=localhost:${PUBSUB_PORT} /usr/bin/pubsubc -debug; nc -lkp ${READY_PORT} >/dev/null) &
 
 # Start the PubSub emulator in the foreground.
-exec java -jar /google-cloud-sdk/platform/pubsub-emulator/lib/cloud-pubsub-emulator-0.8.10.jar --port=${PUBSUB_PORT} --host=0.0.0.0
+exec /google-cloud-sdk/platform/pubsub-emulator/bin/cloud-pubsub-emulator --port=${PUBSUB_PORT} --host=0.0.0.0
