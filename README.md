@@ -1,7 +1,7 @@
 # Containerised Google Cloud Pub/Sub Emulator
 
-This repository contains the Docker configuration for a Google PubSub emulator. It's mainly the containerisation of 
-https://github.com/thinkfluent/pubsubc 
+This repository contains the Docker configuration for a Google PubSub emulator. It's mainly the containerisation of
+https://github.com/thinkfluent/pubsubc
 
 Based on alpine linux, the image is around ~260MB in size (A *lot* smaller than a full-blown gcloud SDK image).
 
@@ -24,7 +24,7 @@ docker run --rm -ti -p 8681:8681 gcloud-pubsub-emulator:latest
 
 ## Usage
 
-Once the emulator is up and running, you should be able to use any app that has PubSub 
+Once the emulator is up and running, you should be able to use any app that has PubSub
 implemented and point it to your Docker container by specifying the `PUBSUB_EMULATOR_HOST` environment variable.
 
 e.g. `PUBSUB_EMULATOR_HOST=localhost:8681`
@@ -57,13 +57,13 @@ services:
 ```
 
 ### wait-for, wait-for-it
-If you're using this Docker image in a docker-compose setup or something similar, you might have leveraged scripts like 
-[wait-for](https://github.com/eficode/wait-for) or [wait-for-it](https://github.com/vishnubob/wait-for-it) to detect when the PubSub service comes up before starting a container that 
-depends on it being up. 
+If you're using this Docker image in a docker-compose setup or something similar, you might have leveraged scripts like
+[wait-for](https://github.com/eficode/wait-for) or [wait-for-it](https://github.com/vishnubob/wait-for-it) to detect when the PubSub service comes up before starting a container that
+depends on it being up.
 
-If you're _not_ using the above-mentioned `PUBSUB_PROJECT` environment variable, you can simply 
-check if port `8681` is available. If you _do_ depend on one or more `PUBSUB_PROJECT` environment variables, you should 
-check for the availability of port `8682` as that one will become available once all the topics and subscriptions have 
+If you're _not_ using the above-mentioned `PUBSUB_PROJECT` environment variable, you can simply
+check if port `8681` is available. If you _do_ depend on one or more `PUBSUB_PROJECT` environment variables, you should
+check for the availability of port `8682` as that one will become available once all the topics and subscriptions have
 been created.
 
 ### Port Configuration, Mapping
@@ -81,6 +81,24 @@ services:
       - '8086:8682'
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+```
+
+### Trusting Self-Signed Certificates
+
+You can configure the emulator to push to endpoints secured by self-signed certificates.
+
+To do this, supply the root certificate (Root CA) or a directory containing them to the container path `/usr/local/share/ca-certificates/` via a volume mount:
+```yaml
+services:
+  # Pub/Sub Emulator. We mount the docker socket so we can use the Docker API to fetch configuration labels
+  pubsub-emulator:
+    image: fluentthinking/gcloud-pubsub-emulator:latest
+    ports:
+      - '8085:8681'
+      - '8086:8682'
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /path/to/folder/with/root/certs/:/usr/local/share/ca-certificates/
 ```
 
 ## Prior Art
