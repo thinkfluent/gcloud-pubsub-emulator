@@ -105,3 +105,10 @@ services:
 Based on the work of:
 - https://github.com/floatschedule/pubsubc
 - https://github.com/marcelcorso/gcloud-pubsub-emulator
+
+## Version Detail
+
+| Version | Build Date | gcloud | PubSub Emulator Version |
+| ------- | ---------- | ------ | ----------------------- |
+| v1.2.0  | 2024-05-22 | 477    | 0.8.14                  |
+| v1.0.0  | 2024-01-24 | 460    | 0.8.10                  |
