@@ -17,8 +17,8 @@ RUN apk update && apk upgrade && apk add --no-cache curl git
 RUN curl -s https://raw.githubusercontent.com/eficode/wait-for/master/wait-for -o /usr/bin/wait-for
 RUN chmod +x /usr/bin/wait-for
 
-# Install pubsubc, with a patch for push endpoint support & docker label support
-RUN go install github.com/thinkfluent/pubsubc@7bb5f605fbd2c8333d92e5ec33f7861897e34bf2
+# Install pubsubc, with a patch for HTTP+HTTPS push endpoint support & docker label support
+RUN go install github.com/thinkfluent/pubsubc@8415308c95272a2907bba012884a32e9993d6dac
 
 ########################################################################################################################
 # Runtime image
