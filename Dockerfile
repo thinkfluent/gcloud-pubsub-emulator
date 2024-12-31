@@ -18,7 +18,7 @@ RUN curl -s https://raw.githubusercontent.com/eficode/wait-for/master/wait-for -
 RUN chmod +x /usr/bin/wait-for
 
 # Install pubsubc, with a patch for HTTP+HTTPS push endpoint support & docker label support
-RUN go install github.com/thinkfluent/pubsubc@8415308c95272a2907bba012884a32e9993d6dac
+RUN go install github.com/thinkfluent/pubsubc@d6679feea13d642c1472e1c4479d0f088c7acfb9
 
 ########################################################################################################################
 # Runtime image

@@ -38,9 +38,10 @@ This image can also automatically create topics and subscriptions on startup. Co
 
 #### Environment Example
 ```dotenv
-PUBSUB_PROJECT1=project-name,topic1,topic2:subscription1:subscription2
+PUBSUB_PROJECT1=project-name,topic1,topic2:subscription1~300:subscription2
 PUBSUB_PROJECT2=project-two,topicA,topicB:subscriptionX:subscriptionY
 PUBSUB_PROJECT3=project-name,topic:push-subscription+myapp/endpoint
+PUBSUB_PROJECT4=project-name,topic4:push-subs-with-deadline~120+myapp/endpoint
 ```
 
 #### Docker Label Example
@@ -52,7 +53,7 @@ services:
     environment:
       - PUBSUB_EMULATOR_HOST=pubsub-emulator:8681
     labels:
-      - 'pubsubc.config1=project-one,topic1,topic2:subscription1:subscription2'
+      - 'pubsubc.config1=project-one,topic1,topic2:subscription1~300:subscription2'
       - 'pubsubc.config2=project-two,topic:push-subscription+endpoint'
 ```
 
@@ -109,6 +110,7 @@ Based on the work of:
 ## Version Detail
 
 | Version | Build Date | gcloud | PubSub Emulator Version |
-| ------- | ---------- | ------ | ----------------------- |
+|---------|------------|--------|-------------------------|
+| v1.3.0  | 2024-12-31 | 504    | 0.8.17                  |
 | v1.2.0  | 2024-05-22 | 477    | 0.8.14                  |
 | v1.0.0  | 2024-01-24 | 460    | 0.8.10                  |
