@@ -109,8 +109,9 @@ Based on the work of:
 
 ## Version Detail
 
-| Version | Build Date | gcloud | PubSub Emulator Version | Docker Image                                            |
-|---------|------------|--------|-------------------------|---------------------------------------------------------|
-| v1.3.0  | 2024-12-31 | 504    | 0.8.17                  | `fluentthinking/gcloud-pubsub-emulator:v1.3.0` `latest` |
-| v1.2.0  | 2024-05-22 | 477    | 0.8.14                  | `fluentthinking/gcloud-pubsub-emulator:v1.2.0`          |
-| v1.0.0  | 2024-01-24 | 460    | 0.8.10                  | `fluentthinking/gcloud-pubsub-emulator:v1.0.0`          |
+| Version | Build Date | gcloud | PubSub Emulator Version | Docker Image                              |
+|--------|-------------|-----|-----------------------|------------------------------------------------|
+| v1.4.0 | 2025-09-21  | 539 | 0.8.24                | `fluentthinking/gcloud-pubsub-emulator:v1.4.0` `latest` |
+| v1.3.0 | 2024-12-31  | 504 | 0.8.17                | `fluentthinking/gcloud-pubsub-emulator:v1.3.0` |
+| v1.2.0 | 2024-05-22  | 477 | 0.8.14                | `fluentthinking/gcloud-pubsub-emulator:v1.2.0` |
+| v1.0.0 | 2024-01-24  | 460 | 0.8.10                | `fluentthinking/gcloud-pubsub-emulator:v1.0.0` |
