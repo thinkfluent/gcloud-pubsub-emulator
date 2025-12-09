@@ -1,6 +1,6 @@
 ########################################################################################################################
 # Build an alpine-based gcloud image with the pubsub emulator installed
-FROM gcr.io/google.com/cloudsdktool/google-cloud-cli:alpine AS alpine_gcloud
+FROM gcr.io/google.com/cloudsdktool/google-cloud-cli:548.0.0-alpine AS alpine_gcloud
 
 # RUN apk add openjdk11
 
